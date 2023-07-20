@@ -4,9 +4,6 @@ from config import setup_db
 from models import Movie, Actor
 from datetime import datetime
 from auth import AuthError
-import sys
-sys.path.append(
-    r'C:\Users\azooz\Desktop\UDACITY\UDACITY-PROJECTS\final_project')
 
 
 def create_app(test_config=None):
