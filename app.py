@@ -10,6 +10,10 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
 
+    @app.route('/')
+    def index():
+        return ' To The MOON :) '
+
     # GET MOVIES
 
     @app.route('/movies', methods=['GET'])
