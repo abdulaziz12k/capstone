@@ -1,7 +1,7 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
+# DB CONNECTION VARIABLES TO RENDER POSTGERSQL DATABASE
 DB_HOST = os.getenv('DB_HOST', 'dpg-cisgogh5rnujejoug2e0-a')
 DB_USER = os.getenv('DB_USER', 'student')
 DB_PASSWORD = os.getenv('DB_PASSWORD', 'TT6DpQOzAiQa4wlx0aZOBPr9nNdTFimB')
