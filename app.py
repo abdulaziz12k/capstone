@@ -13,7 +13,7 @@ def create_app(test_config=None):
     # main page for render web service
     @app.route('/')
     def index():
-        return ' To The MOON :) '
+        return ' To The MOON ! change the URL on top, add this /movies for starters'
 
     # GET MOVIES
 
