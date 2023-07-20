@@ -10,6 +10,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
 
+    # main page for render web service
     @app.route('/')
     def index():
         return ' To The MOON :) '
