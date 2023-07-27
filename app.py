@@ -31,7 +31,7 @@ def create_app(test_config=None):
 
     @app.route('/movies/create', methods=['POST'])
     @requires_auth('post:movie')
-    def create_movie():
+    def create_movie(payload):
         response = request.get_json()
         if response is None:
             abort(404)
