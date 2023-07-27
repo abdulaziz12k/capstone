@@ -52,6 +52,7 @@ def create_app(test_config=None):
     # UPDATE MOVIE
 
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
+    @requires_auth('patch:movie')
     def update_movie(movie_id):
         response = request.get_json()
         if response is None:
@@ -73,6 +74,7 @@ def create_app(test_config=None):
     # DELETE MOVIE
 
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
+    @requires_auth('delete:movie')
     def delete_movie(movie_id):
         response = Movie.query.filter(Movie.id == movie_id).first()
         if response is None:
@@ -100,6 +102,7 @@ def create_app(test_config=None):
     # POST ACTORS
 
     @app.route('/actor/create', methods=['POST'])
+    @requires_auth('post:actor')
     def create_actor():
         response = request.get_json()
         if not response:
@@ -122,6 +125,7 @@ def create_app(test_config=None):
     # UPDATE ACTOR DATA
 
     @app.route('/actor/<int:actor_id>', methods=['PATCH'])
+    @requires_auth('patch:actor')
     def update_actor(actor_id):
         response = request.get_json()
         if response is None:
@@ -143,6 +147,7 @@ def create_app(test_config=None):
     # DELETE ACTOR
 
     @app.route('/actor/<int:actor_id>', methods=['DELETE'])
+    @requires_auth('delete:actor')
     def delete_actor(actor_id):
         actor = Actor.query.filter(Actor.id == actor_id).first()
         if actor is None:
