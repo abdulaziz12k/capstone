@@ -121,14 +121,14 @@ def requires_auth(permission=''):
     return requires_auth_decorator
 
 
-@requires_auth('get:actors')
-@requires_auth('get:movies')
-@requires_auth('post:actor')
-@requires_auth('post:movie')
-@requires_auth('patch:actor')
-@requires_auth('patch:movie')
-@requires_auth('delete:actor')
-@requires_auth('delete:movie')
+# @requires_auth('get:actors')
+# @requires_auth('get:movies')
+# @requires_auth('post:actor')
+# @requires_auth('post:movie')
+# @requires_auth('patch:actor')
+# @requires_auth('patch:movie')
+# @requires_auth('delete:actor')
+# @requires_auth('delete:movie')
 def capstone(jwt):
     print(jwt)
     return "not implemented"
