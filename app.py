@@ -3,7 +3,7 @@ from flask import Flask, request, abort, jsonify
 from config import setup_db
 from models import Movie, Actor
 from datetime import datetime
-from auth import AuthError
+from auth import AuthError, requires_auth
 
 
 def create_app(test_config=None):
@@ -30,6 +30,7 @@ def create_app(test_config=None):
     # CREATE MOVIE
 
     @app.route('/movies/create', methods=['POST'])
+    @requires_auth('post:movie')
     def create_movie():
         response = request.get_json()
         if response is None:
