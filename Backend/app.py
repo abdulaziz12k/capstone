@@ -8,7 +8,8 @@ from flask import render_template
 
 
 def create_app(test_config=None):
-    app = Flask(__name__, template_folder='../Frontend')
+    app = Flask(
+        __name__, template_folder='C:\\Users\\azooz\\Desktop\\UDACITY\\UDACITY-PROJECTS\\capstone\\templates')
     setup_db(app)
 
     # main page for render web service
