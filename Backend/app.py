@@ -7,7 +7,7 @@ from Backend.auth import AuthError, requires_auth
 
 
 def create_app(test_config=None):
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='Frontend')
     setup_db(app)
 
     # main page for render web service
