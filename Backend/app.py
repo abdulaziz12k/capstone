@@ -4,6 +4,7 @@ from Backend.config import setup_db
 from Backend.models import Movie, Actor
 from datetime import datetime
 from Backend.auth import AuthError, requires_auth
+from flask import render_template
 
 
 def create_app(test_config=None):
@@ -23,9 +24,10 @@ def create_app(test_config=None):
         if not response:
             abort(404)
         else:
-            return jsonify({
-                "Movies": [i.format()for i in response]
-            })
+            return render_template('movies.html', movies=response)
+            # return jsonify({
+            #     "Movies": [i.format()for i in response]
+            # })
 
     # CREATE MOVIE
 
