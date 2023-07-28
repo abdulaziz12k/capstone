@@ -24,7 +24,7 @@ def create_app(test_config=None):
         if not response:
             abort(404)
         else:
-            return render_template('C:\\Users\\azooz\\Desktop\\UDACITY\\UDACITY-PROJECTS\\capstone\\Frontend\\movies.html',
+            return render_template('/Users/azooz/Desktop/UDACITY/UDACITY-PROJECTS/capstone/Frontend/movies.html',
                                    movies=response)
             # return jsonify({
             #     "Movies": [i.format()for i in response]
