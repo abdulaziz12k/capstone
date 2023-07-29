@@ -25,7 +25,7 @@ def create_app(test_config=None):
         if not response:
             abort(404)
         else:
-            return render_template('../templates/movies.html',
+            return render_template('movies.html',
                                    movies=response)
             # return jsonify({
             #     "Movies": [i.format()for i in response]
