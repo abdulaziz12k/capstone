@@ -9,7 +9,7 @@ from flask import render_template
 
 def create_app(test_config=None):
     app = Flask(
-        __name__, template_folder='.../templates')
+        __name__, template_folder='../templates')
     setup_db(app)
 
     # main page for render web service
@@ -25,7 +25,7 @@ def create_app(test_config=None):
         if not response:
             abort(404)
         else:
-            return render_template('C:/Users/azooz/Desktop/UDACITY/UDACITY-PROJECTS/capstone/templates/movies.html',
+            return render_template('../templates/movies.html',
                                    movies=response)
             # return jsonify({
             #     "Movies": [i.format()for i in response]
