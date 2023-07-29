@@ -1,4 +1,4 @@
-from Backend.config import db
+from config import db
 from sqlalchemy import Column, Integer, String, Date
 
 
