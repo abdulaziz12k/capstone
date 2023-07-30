@@ -99,9 +99,11 @@ def create_app(test_config=None):
         if not response:
             abort(404)
         else:
-            return jsonify({
-                "Actors:": [i.format() for i in response]
-            }), 200
+            return render_template('actors.html',
+                                   actors=response)
+            # return jsonify({
+            #     "Actors:": [i.format() for i in response]
+            # }), 200
 
     # POST ACTORS
 
