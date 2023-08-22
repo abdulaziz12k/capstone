@@ -1,9 +1,9 @@
 import os
 from flask import Flask, request, abort, jsonify
-from .config import setup_db
-from .models import Movie, Actor
+from config import setup_db
+from models import Movie, Actor
 from datetime import datetime
-from .auth import AuthError, requires_auth
+from auth import AuthError, requires_auth
 from flask import render_template
 
 
