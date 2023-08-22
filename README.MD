@@ -11,7 +11,7 @@ the application is deployed and hosted within RENDER using RENDER webservice and
 https://capstone-service.onrender.com
 the db dump created to include some data from the local testing db to add data to showcase resutls in endpoints
 - TO RUN THE APP LOCALLY
-1. change the config.py data to your local database
+1. change the config.py data to your PostgreSQL local database
 2. pip install -r requirements.txt to install all dependecies
 3. set FLASK_APP=app.py
 4. flask run --reload
