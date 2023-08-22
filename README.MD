@@ -7,7 +7,7 @@ The application includes all CRUD features and JWT decoding, coding using AUTH0
 
 ##  Getting started
 
-the application is deployed and hosted using RENDER using RENDER webservice and RENDER postgresql on this URL:
+the application is deployed and hosted within RENDER using RENDER webservice and RENDER postgresql on this URL:
 https://capstone-service.onrender.com
 the db dump created to include some data from the local testing db to add data to showcase resutls in endpoints
 - TO RUN THE APP LOCALLY
