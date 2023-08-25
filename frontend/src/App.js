@@ -1,6 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-
+function MyButton() {
+  return (
+    <button>I'm a button</button>
+  );
+}
 function App() {
   return (
     <div className="App">
@@ -15,11 +19,12 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          To Infinity And Biond
         </a>
+        <MyButton/>
       </header>
+      <body></body>
     </div>
   );
 }
-
 export default App;
