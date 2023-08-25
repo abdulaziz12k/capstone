@@ -2,9 +2,9 @@ import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-from config import *
-from models import *
-from app import *
+from .config import *
+from .models import *
+from .app import *
 
 # Unitest class
 
