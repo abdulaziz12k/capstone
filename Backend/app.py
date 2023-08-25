@@ -165,6 +165,14 @@ def create_app(test_config=None):
                 "deleted": actor_id
             }), 200
 
+    @app.route('/googlemap')
+    def googlemap():
+        return render_template('googlemap.html')
+
+    @app.route('/spotify')
+    def spotify():
+        return render_template('spotify.html')
+
     # _______ERROR HANDLING _________#
 
     @app.errorhandler(404)
