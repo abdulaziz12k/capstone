@@ -1,9 +1,9 @@
 import os
 from flask import Flask, request, abort, jsonify
-from .config import setup_db
-from .models import Movie, Actor
+from config import setup_db
+from models import Movie, Actor
 from datetime import datetime
-from .auth import AuthError, requires_auth
+from auth import AuthError, requires_auth
 from flask import render_template
 
 
@@ -15,7 +15,7 @@ def create_app(test_config=None):
     # main page for render web service
     @app.route('/')
     def index():
-        return ' To The MOON ! change the URL on top, add this in the end  "/movies" for starters'
+        return render_template('main.html')
 
     # GET MOVIES
 
