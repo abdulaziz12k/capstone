@@ -25,11 +25,11 @@ def create_app(test_config=None):
         if not response:
             abort(404)
         else:
-            # return render_template('movies.html',
-            #                        movies=response)
-            return jsonify({
-                "Movies": [i.format()for i in response]
-            })
+            return render_template('movies.html',
+                                   movies=response)
+            # return jsonify({
+            #     "Movies": [i.format()for i in response]
+            # })
 
     # CREATE MOVIE
 
@@ -99,11 +99,11 @@ def create_app(test_config=None):
         if not response:
             abort(404)
         else:
-            # return render_template('actors.html',
-            #                        actors=response)
-            return jsonify({
-                "Actors:": [i.format() for i in response]
-            }), 200
+            return render_template('actors.html',
+                                   actors=response)
+            # return jsonify({
+            #     "Actors:": [i.format() for i in response]
+            # }), 200
 
     # POST ACTORS
 
