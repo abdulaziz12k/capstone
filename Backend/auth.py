@@ -4,7 +4,7 @@ from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 from flask import abort
-from auth0.v3.authentication import WebAuth, auth0
+import auth0.client
 
 AUTH0_DOMAIN = '3z12k.eu.auth0.com'
 ALGORITHMS = ['RS256']
