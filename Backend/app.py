@@ -1,21 +1,23 @@
 import os
-from flask import Flask, request, abort, jsonify
+from flask import Flask, request, abort, jsonify, render_template, redirect, current_app
 from config import setup_db
 from models import Movie, Actor
 from datetime import datetime
-from auth import AuthError, requires_auth
-from flask import render_template
+from auth import AuthError, requires_auth, check_permissions
+from flask_login import current_user
 
 
 def create_app(test_config=None):
     app = Flask(
-        __name__, template_folder='../templates')
+        __name__, template_folder='../templates/pages')
     setup_db(app)
 
     # main page for render web service
     @app.route('/')
     def index():
-        return render_template('main.html')
+        if not current_app.current_user.is_authenticated:
+            return render_template('login.html')
+        return redirect('main.html')
 
     # GET MOVIES
 
@@ -57,7 +59,7 @@ def create_app(test_config=None):
 
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     @requires_auth('patch:movie')
-    def update_movie(movie_id):
+    def update_movie(payload, movie_id):
         response = request.get_json()
         if response is None:
             abort(404)
@@ -79,7 +81,7 @@ def create_app(test_config=None):
 
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     @requires_auth('delete:movie')
-    def delete_movie(movie_id):
+    def delete_movie(payload, movie_id):
         response = Movie.query.filter(Movie.id == movie_id).first()
         if response is None:
             abort(404)
@@ -109,7 +111,7 @@ def create_app(test_config=None):
 
     @app.route('/actor/create', methods=['POST'])
     @requires_auth('post:actor')
-    def create_actor():
+    def create_actor(payload):
         response = request.get_json()
         if not response:
             abort(404)
@@ -132,7 +134,7 @@ def create_app(test_config=None):
 
     @app.route('/actor/<int:actor_id>', methods=['PATCH'])
     @requires_auth('patch:actor')
-    def update_actor(actor_id):
+    def update_actor(payload, actor_id):
         response = request.get_json()
         if response is None:
             abort(404)
@@ -154,7 +156,8 @@ def create_app(test_config=None):
 
     @app.route('/actor/<int:actor_id>', methods=['DELETE'])
     @requires_auth('delete:actor')
-    def delete_actor(actor_id):
+    def delete_actor(payload, actor_id):
+        check_permissions('delete:actor', payload)
         actor = Actor.query.filter(Actor.id == actor_id).first()
         if actor is None:
             abort(404)
