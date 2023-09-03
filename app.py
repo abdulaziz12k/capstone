@@ -1,39 +1,32 @@
-import os
-from flask import Flask, request, abort, jsonify, render_template, redirect, url_for, flash, current_user
+from flask import Flask, request, abort, jsonify, render_template, redirect, url_for
 from config import setup_db
 from models import Movie, Actor
-from auth import auth0_client
 from datetime import datetime
 from auth import AuthError, requires_auth, check_permissions
 from flask_login import LoginManager
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
-from flask_login import login_user, UserMixin
-
+from flask_login import login_user, login_required, current_user
+from auth import login_manager, client_id, domain
+import auth0
 
 # inheritence of Flask-WTF validating the form data,
 # generating CSRF tokens, and rendering form fields.
-class User(UserMixin):
-    def __init__(self, id, name):
-        self.id = id
-        self.name = name
+
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
 
 
 def create_app(test_config=None):
     app = Flask(
         __name__, template_folder='../templates/pages')
     setup_db(app)
-
-    login_manager = LoginManager()
-    login_manager.init_app(app)
-    login_manager.client_id = 'YOUR_CLIENT_ID'
-    login_manager.client_secret = 'YOUR_CLIENT_SECRET'
-    login_manager.domain = 'YOUR_DOMAIN'
-
     # Login Page
 
-    @app.route('/login', methods=['GET', 'POST'])
+    @app.route('/', methods=['GET', 'POST'])
     def login():
         if request.method == 'GET':
             return render_template('login.html')
@@ -42,23 +35,27 @@ def create_app(test_config=None):
             username = form.username.data
             password = form.password.data
 
-            # Use the `flask_login` module to authenticate the user
+            # Get the code from the request object
+            code = request.form.get('code')
+            # when a user logs in. This code is used to exchange for an access token and ID token, which are used to authenticate the user
             user = login_user(auth0.login(code))
-
             # Redirect the user to the home page
-            return redirect(url_for('homepage'))
+            return redirect(url_for('homepage.html'))
+
         else:
             return '''
-            <form action="/login" method="post">
-                <input type="hidden" name="code" value="<code>">
-                <input type="submit" value="Login">
-            </form>
-            '''
+                <form action="/login" method="post">
+                    <input type="hidden" name="code" value="<code>">
+                    <input type="submit" value="Login">
+                </form>
+                '''
 
+    # HomePage
     @app.route('/homepage')
+    @login_required
     def main():
         if current_user is None:
-            return redirect(url_for('login'))
+            return redirect(url_for('login.html'))
         return render_template('homepage.html')
 
     # GET MOVIES

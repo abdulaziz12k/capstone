@@ -5,20 +5,20 @@ from jose import jwt
 from urllib.request import urlopen
 from flask import abort
 from flask_login import LoginManager
+import auth0
 
+# AUTH0 Configuration
 AUTH0_DOMAIN = '3z12k.eu.auth0.com'
 ALGORITHMS = ['RS256']
-# it is the actuall Unique identifier for the API i used
 API_AUDIENCE = 'http://127.0.0.1:5000'
 
 login_manager = LoginManager()
-
 client_id = 'cEuXaQ5NojpZwxODfaiowwP3kfPmD26T'
 # client_secret = 'YOUR_CLIENT_SECRET'
 domain = '3z12k.eu.auth0.com'
+
+
 # AuthError Exception
-
-
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
@@ -26,7 +26,6 @@ class AuthError(Exception):
 
 
 # Auth Header
-
 def get_token_auth_header():
     if 'Authorization' not in request.headers:
         abort(401)
@@ -56,7 +55,15 @@ def check_permissions(permission, payload):
         }, 403)
     return True
 
+# USER LOADER
 
+
+def user_loader(user_id):
+    user = auth0.login(user_id)
+    return user
+
+
+login_manager.user_loader = user_loader
 # VERIFYING TOKENS
 
 
