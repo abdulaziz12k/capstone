@@ -5,9 +5,9 @@ from models import Movie, Actor
 from auth import auth0_client
 from datetime import datetime
 from auth import AuthError, requires_auth, check_permissions
-from flask_login import current_user, login_required, LoginManager
+from flask_login import LoginManager
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 from flask_login import login_user
 
