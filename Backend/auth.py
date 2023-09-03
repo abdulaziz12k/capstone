@@ -4,8 +4,7 @@ from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 from flask import abort
-import auth0
-from auth0 import WebAuth
+from auth0.v3.authentication import WebAuth, auth0
 
 AUTH0_DOMAIN = '3z12k.eu.auth0.com'
 ALGORITHMS = ['RS256']
@@ -16,7 +15,7 @@ API_AUDIENCE = 'http://127.0.0.1:5000'
 auth0_client = auth0.WebAuth(
     client_id='YOUR_CLIENT_ID',
     client_secret='capstone',
-    domain={AUTH0_DOMAIN}
+    domain=AUTH0_DOMAIN
 )
 
 # AuthError Exception

@@ -1,11 +1,22 @@
 import os
-from flask import Flask, request, abort, jsonify, render_template, redirect, current_app
+from flask import Flask, request, abort, jsonify, render_template, redirect, url_for, flash
 from config import setup_db
 from models import Movie, Actor
+from auth import auth0_client
 from datetime import datetime
-from authintication import AuthError, requires_auth, check_permissions
+from auth import AuthError, requires_auth, check_permissions
 from flask_login import current_user, login_required, LoginManager
-from authintication import auth0_client
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired
+from flask_login import login_user
+
+
+# inheritence of Flask-WTF validating the form data,
+# generating CSRF tokens, and rendering form fields.
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
 
 
 def create_app(test_config=None):
@@ -14,21 +25,31 @@ def create_app(test_config=None):
     setup_db(app)
     login_manager = LoginManager()
     login_manager.init_app(app)
-    # main page for render web service
 
-    @app.route('/login', methods=['POST'])
+    # Login Page
+
+    @app.route('/login', methods=['GET', 'POST'])
     def login():
-        username = request.json['username']
-        password = request.json['password']
+        if request.method == 'GET':
+            return render_template('login.html')
+        form = LoginForm()
+        if form.validate_on_submit():
+            username = form.username.data
+            password = form.password.data
+            user = auth0_client.users.get(username)
 
-        user = auth0_client.users.get(username)
+            if user is not None and user['email'] == username:
+                login_user(user)
 
-        if user is None or not user['email'] == username:
-            return jsonify({'message': 'Invalid username or password'})
+                flash('Logged in successfully.')
+                return redirect(url_for('homepage.html'))
+            else:
+                flash('Invalid username or password.')
+        return render_template('login.html', form=form)
 
-        login_user(user)
-
-        return redirect('main.html')
+    @app.route('/homepage')
+    def main():
+        return render_template('homepage.html')
 
     # GET MOVIES
 
