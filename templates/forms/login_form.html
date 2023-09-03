@@ -2,6 +2,9 @@
   <div class="user-box">
     <input type="text" name="username" required="" />
     <label>Username</label>
+    {% if error %}
+    <span class="error">Invalid username or password</span>
+    {% endif %}
   </div>
   <div class="user-box">
     <input type="password" name="password" required="" />

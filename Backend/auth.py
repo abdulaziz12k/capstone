@@ -4,20 +4,18 @@ from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 from flask import abort
-import auth0
+from flask_login import LoginManager
 
 AUTH0_DOMAIN = '3z12k.eu.auth0.com'
 ALGORITHMS = ['RS256']
 # it is the actuall Unique identifier for the API i used
 API_AUDIENCE = 'http://127.0.0.1:5000'
 
-# Implementing Auth0 Client to get user data when loging in
-auth0_client = auth0.WebAuth(
-    client_id='YOUR_CLIENT_ID',
-    client_secret='capstone',
-    domain=AUTH0_DOMAIN
-)
+login_manager = LoginManager()
 
+client_id = 'cEuXaQ5NojpZwxODfaiowwP3kfPmD26T'
+# client_secret = 'YOUR_CLIENT_SECRET'
+domain = '3z12k.eu.auth0.com'
 # AuthError Exception
 
 

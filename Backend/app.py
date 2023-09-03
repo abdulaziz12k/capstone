@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, abort, jsonify, render_template, redirect, url_for, flash
+from flask import Flask, request, abort, jsonify, render_template, redirect, url_for, flash, current_user
 from config import setup_db
 from models import Movie, Actor
 from auth import auth0_client
@@ -9,22 +9,27 @@ from flask_login import LoginManager
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
-from flask_login import login_user
+from flask_login import login_user, UserMixin
 
 
 # inheritence of Flask-WTF validating the form data,
 # generating CSRF tokens, and rendering form fields.
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
+class User(UserMixin):
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
 
 
 def create_app(test_config=None):
     app = Flask(
         __name__, template_folder='../templates/pages')
     setup_db(app)
+
     login_manager = LoginManager()
     login_manager.init_app(app)
+    login_manager.client_id = 'YOUR_CLIENT_ID'
+    login_manager.client_secret = 'YOUR_CLIENT_SECRET'
+    login_manager.domain = 'YOUR_DOMAIN'
 
     # Login Page
 
@@ -36,19 +41,24 @@ def create_app(test_config=None):
         if form.validate_on_submit():
             username = form.username.data
             password = form.password.data
-            user = auth0_client.users.get(username)
 
-            if user is not None and user['email'] == username:
-                login_user(user)
+            # Use the `flask_login` module to authenticate the user
+            user = login_user(auth0.login(code))
 
-                flash('Logged in successfully.')
-                return redirect(url_for('homepage.html'))
-            else:
-                flash('Invalid username or password.')
-        return render_template('login.html', form=form)
+            # Redirect the user to the home page
+            return redirect(url_for('homepage'))
+        else:
+            return '''
+            <form action="/login" method="post">
+                <input type="hidden" name="code" value="<code>">
+                <input type="submit" value="Login">
+            </form>
+            '''
 
     @app.route('/homepage')
     def main():
+        if current_user is None:
+            return redirect(url_for('login'))
         return render_template('homepage.html')
 
     # GET MOVIES
