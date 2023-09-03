@@ -22,7 +22,7 @@ class LoginForm(FlaskForm):
 
 def create_app(test_config=None):
     app = Flask(
-        __name__, template_folder='../templates/pages')
+        __name__, template_folder='templates/pages')
     setup_db(app)
     # Login Page
 
