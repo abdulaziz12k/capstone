@@ -3,20 +3,31 @@ from flask import Flask, request, abort, jsonify, render_template, redirect, cur
 from config import setup_db
 from models import Movie, Actor
 from datetime import datetime
-from auth import AuthError, requires_auth, check_permissions
-from flask_login import current_user
+from authintication import AuthError, requires_auth, check_permissions
+from flask_login import current_user, login_required, LoginManager
+from authintication import auth0_client
 
 
 def create_app(test_config=None):
     app = Flask(
         __name__, template_folder='../templates/pages')
     setup_db(app)
-
+    login_manager = LoginManager()
+    login_manager.init_app(app)
     # main page for render web service
-    @app.route('/')
-    def index():
-        if not current_app.current_user.is_authenticated:
-            return render_template('login.html')
+
+    @app.route('/login', methods=['POST'])
+    def login():
+        username = request.json['username']
+        password = request.json['password']
+
+        user = auth0_client.users.get(username)
+
+        if user is None or not user['email'] == username:
+            return jsonify({'message': 'Invalid username or password'})
+
+        login_user(user)
+
         return redirect('main.html')
 
     # GET MOVIES
