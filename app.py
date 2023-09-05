@@ -2,13 +2,9 @@ from flask import Flask, request, abort, jsonify, render_template, redirect, url
 from db_config import setup_db
 from models import Movie, Actor
 from datetime import datetime
-from auth_lib.views import AuthError, requires_auth, check_permissions
-from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
-from flask_login import login_user, login_required, current_user
-import auth0
-from auth_lib.views import *
+from auth import requires_auth, check_permissions, AuthError
 
 
 def create_app(test_config=None):
@@ -17,47 +13,18 @@ def create_app(test_config=None):
     setup_db(app)
     app.secret_key = 'bafddb088a222c78b54f96f9eab7aaff'
 
-    app.register_blueprint(auth_bp, url_prefix='/')
-
     # Login Page
-    @auth_bp.route("/login")
+    @app.route('/')
     def login():
-        """
-        Redirects the user to the Auth0 Universal Login (https://auth0.com/docs/authenticate/login/auth0-universal-login)
-        """
-        return oauth.auth0.authorize_redirect(
-            redirect_uri=url_for("auth.callback", _external=True)
-        )
+        # Construct the Auth0 login URL
+        auth0_login_url = f'https://{AUTH0_DOMAIN}/authorize?audience={API_AUDIENCE}&response_type=code&client_id={client_id}&redirect_uri={url_for("callback", _external=True)}'
 
-    @app.route('/', methods=['GET', 'POST'])
-    def login():
-        if request.method == 'GET':
-            return render_template("login.html")
-
-        form = LoginForm()
-        if form.validate_on_submit():
-            username = form.username.data
-            password = form.password.data
-
-            # Use the Auth0 login endpoint to authenticate the user using username and password
-            user = auth0.login_with_credentials(username, password)
-
-            # Redirect the user to the home page if the login is successful
-            if user is not None:
-                return redirect(url_for('homepage.html'))
-
-            # Otherwise, display an error message
-            else:
-                flash('Invalid username or password')
-                return render_template('login.html')
-        return render_template('login.html')
+    # Redirect the user to the Auth0 login page
+    return redirect(auth0_login_url)
     # HomePage
 
     @app.route('/homepage')
-    @login_required
     def main():
-        if current_user is None:
-            return redirect(url_for('login.html'))
         return render_template('homepage.html')
 
     # GET MOVIES
