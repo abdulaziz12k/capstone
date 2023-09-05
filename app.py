@@ -2,21 +2,13 @@ from flask import Flask, request, abort, jsonify, render_template, redirect, url
 from db_config import setup_db
 from models import Movie, Actor
 from datetime import datetime
-from auth import AuthError, requires_auth, check_permissions
+from auth_lib.views import AuthError, requires_auth, check_permissions
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 from flask_login import login_user, login_required, current_user
-from auth import login_manager, client_id, domain
 import auth0
-from auth.views import auth_bp
-# inheritence of Flask-WTF validating the form data,
-# generating CSRF tokens, and rendering form fields.
-
-
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
+from auth_lib.views import *
 
 
 def create_app(test_config=None):
@@ -28,6 +20,14 @@ def create_app(test_config=None):
     app.register_blueprint(auth_bp, url_prefix='/')
 
     # Login Page
+    @auth_bp.route("/login")
+    def login():
+        """
+        Redirects the user to the Auth0 Universal Login (https://auth0.com/docs/authenticate/login/auth0-universal-login)
+        """
+        return oauth.auth0.authorize_redirect(
+            redirect_uri=url_for("auth.callback", _external=True)
+        )
 
     @app.route('/', methods=['GET', 'POST'])
     def login():
