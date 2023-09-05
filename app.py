@@ -14,13 +14,7 @@ def create_app(test_config=None):
     app.secret_key = 'bafddb088a222c78b54f96f9eab7aaff'
 
     # Login Page
-    @app.route('/')
-    def login():
-        # Construct the Auth0 login URL
-        auth0_login_url = f'https://{AUTH0_DOMAIN}/authorize?audience={API_AUDIENCE}&response_type=code&client_id={client_id}&redirect_uri={url_for("callback", _external=True)}'
 
-    # Redirect the user to the Auth0 login page
-    return redirect(auth0_login_url)
     # HomePage
 
     @app.route('/homepage')
