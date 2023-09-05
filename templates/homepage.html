@@ -4,6 +4,7 @@
     <title>Flask App</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="static/css/homepage.css" rel="stylesheet"/>
   </head>
   <body>
     <div class="container">
@@ -25,5 +26,6 @@
         </div>
         </div>
         </div>
+        <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
   </body>
 </html>
