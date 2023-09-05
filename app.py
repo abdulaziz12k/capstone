@@ -1,16 +1,15 @@
-from flask import Flask, request, abort, jsonify, render_template, redirect, url_for
-from config import setup_db
+from flask import Flask, request, abort, jsonify, render_template, redirect, url_for, flash, Blueprint
+from db_config import setup_db
 from models import Movie, Actor
 from datetime import datetime
 from auth import AuthError, requires_auth, check_permissions
-from flask_login import LoginManager
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 from flask_login import login_user, login_required, current_user
 from auth import login_manager, client_id, domain
 import auth0
-
+from auth.views import auth_bp
 # inheritence of Flask-WTF validating the form data,
 # generating CSRF tokens, and rendering form fields.
 
@@ -22,35 +21,38 @@ class LoginForm(FlaskForm):
 
 def create_app(test_config=None):
     app = Flask(
-        __name__, template_folder='templates/pages')
+        __name__, template_folder='templates')
     setup_db(app)
+    app.secret_key = 'bafddb088a222c78b54f96f9eab7aaff'
+
+    app.register_blueprint(auth_bp, url_prefix='/')
+
     # Login Page
 
     @app.route('/', methods=['GET', 'POST'])
     def login():
         if request.method == 'GET':
-            return render_template('login.html')
+            return render_template("login.html")
+
         form = LoginForm()
         if form.validate_on_submit():
             username = form.username.data
             password = form.password.data
 
-            # Get the code from the request object
-            code = request.form.get('code')
-            # when a user logs in. This code is used to exchange for an access token and ID token, which are used to authenticate the user
-            user = login_user(auth0.login(code))
-            # Redirect the user to the home page
-            return redirect(url_for('homepage.html'))
+            # Use the Auth0 login endpoint to authenticate the user using username and password
+            user = auth0.login_with_credentials(username, password)
 
-        else:
-            return '''
-                <form action="/login" method="post">
-                    <input type="hidden" name="code" value="<code>">
-                    <input type="submit" value="Login">
-                </form>
-                '''
+            # Redirect the user to the home page if the login is successful
+            if user is not None:
+                return redirect(url_for('homepage.html'))
 
+            # Otherwise, display an error message
+            else:
+                flash('Invalid username or password')
+                return render_template('login.html')
+        return render_template('login.html')
     # HomePage
+
     @app.route('/homepage')
     @login_required
     def main():

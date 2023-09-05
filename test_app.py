@@ -2,7 +2,7 @@ import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-from .config import *
+from .db_config import *
 from .models import *
 from .app import *
 

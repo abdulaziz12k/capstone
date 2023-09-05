@@ -13,9 +13,9 @@ ALGORITHMS = ['RS256']
 API_AUDIENCE = 'http://127.0.0.1:5000'
 
 login_manager = LoginManager()
-client_id = 'cEuXaQ5NojpZwxODfaiowwP3kfPmD26T'
-# client_secret = 'YOUR_CLIENT_SECRET'
-domain = '3z12k.eu.auth0.com'
+CLIENT_ID = 'cEuXaQ5NojpZwxODfaiowwP3kfPmD26T'
+CLIENT_SECRET = 'kftzuAAquSWq_tol2biwXb0TzHcvZeZPQaByE3J-AOv5ZNVDxG-6qLqquU1fkQ15'
+DOMAIN = '3z12k.eu.auth0.com'
 
 
 # AuthError Exception
