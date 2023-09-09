@@ -2,8 +2,7 @@ from flask import Flask, request, abort, jsonify, render_template, redirect, url
 from db_config import setup_db
 from models import Movie, Actor
 from datetime import datetime
-from auth import requires_auth, check_permissions, AuthError
-from auth import AUTH0_DOMAIN, AUTH0_AUDIENCE, AUTH0_CLIENT_ID
+from auth import requires_auth, check_permissions, AuthError, AUTH0_DOMAIN, AUTH0_AUDIENCE, AUTH0_CLIENT_ID, auth0_login_url, auth0_logout_url
 
 
 def create_app(test_config=None):
@@ -15,21 +14,15 @@ def create_app(test_config=None):
     # Login Page
     @app.route('/')
     def login():
-        # Construct the Auth0 login URL
-        auth0_login_url = f'https://{AUTH0_DOMAIN}/authorize?audience={AUTH0_AUDIENCE}&response_type=code&client_id={AUTH0_CLIENT_ID}&redirect_uri={url_for("callback", _external=True)}'
-
+        # AUTH0 Login URL Constraint is imported from auth config file
         # Redirect the user to the Auth0 login page
         return redirect(auth0_login_url)
+
     # Logout route
 
     @app.route('/logout')
     def logout():
-        # Log the user out of your application
-        # ...
-
-        # Construct the Auth0 logout URL
-        auth0_logout_url = f'https://{AUTH0_DOMAIN}/v2/logout?returnTo={url_for("login", _external=True)}'
-
+        # AUTH0 Logout URL Constraint is imported from auth config file
         # Redirect the user to the Auth0 logout page
         return redirect(auth0_logout_url)
 

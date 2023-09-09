@@ -5,7 +5,7 @@ from jose import jwt
 from urllib.request import urlopen
 from flask import abort
 from authlib.integrations.flask_client import OAuth
-
+from flask import url_for
 
 # AUTH0 Configuration
 AUTH0_DOMAIN = '3z12k.eu.auth0.com'
@@ -13,7 +13,9 @@ ALGORITHMS = ['RS256']
 AUTH0_CLIENT_ID = 'cEuXaQ5NojpZwxODfaiowwP3kfPmD26T'
 AUTH0_CLIENT_SECRET = 'kftzuAAquSWq_tol2biwXb0TzHcvZeZPQaByE3J-AOv5ZNVDxG-6qLqquU1fkQ15'
 AUTH0_AUDIENCE = 'http://127.0.0.1:5000'
-
+# Login-Logout URL Construct, to be used in the API endpoint
+auth0_login_url = f'https://{AUTH0_DOMAIN}/authorize?audience={AUTH0_AUDIENCE}&response_type=code&client_id={AUTH0_CLIENT_ID}&redirect_uri={url_for("callback", _external=True)}'
+auth0_logout_url = f'https://{AUTH0_DOMAIN}/v2/logout?returnTo={url_for("login", _external=True)}'
 
 # 0Auth client object
 
