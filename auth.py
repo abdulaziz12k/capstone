@@ -5,14 +5,20 @@ from jose import jwt
 from urllib.request import urlopen
 from flask import abort
 from authlib.integrations.flask_client import OAuth
+import os
+from dotenv import load_dotenv
 
 
-# AUTH0 Configuration
-AUTH0_DOMAIN = '3z12k.eu.auth0.com'
-ALGORITHMS = ['RS256']
-AUTH0_CLIENT_ID = 'cEuXaQ5NojpZwxODfaiowwP3kfPmD26T'
-AUTH0_CLIENT_SECRET = 'kftzuAAquSWq_tol2biwXb0TzHcvZeZPQaByE3J-AOv5ZNVDxG-6qLqquU1fkQ15'
-AUTH0_AUDIENCE = 'http://127.0.0.1:5000'
+# Parse .env file and load all the variables found as environment variables.
+
+
+load_dotenv()
+
+AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN')
+ALGORITHMS = [os.getenv('ALGORITHMS')]
+AUTH0_CLIENT_ID = os.getenv('AUTH0_CLIENT_ID')
+AUTH0_CLIENT_SECRET = os.getenv('AUTH0_CLIENT_SECRET')
+AUTH0_AUDIENCE = os.getenv('AUTH0_AUDIENCE')
 
 # 0Auth client object
 
