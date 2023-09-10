@@ -1,8 +1,14 @@
-from flask import Flask, request, abort, jsonify, render_template, redirect, url_for, flash, Blueprint
+from flask import Flask, request, abort, jsonify, render_template, redirect, url_for
 from db_config import setup_db
 from models import Movie, Actor
 from datetime import datetime
-from auth import requires_auth, check_permissions, AuthError, AUTH0_DOMAIN, AUTH0_AUDIENCE, AUTH0_CLIENT_ID, auth0_login_url, auth0_logout_url
+from auth import requires_auth, check_permissions, AuthError, AUTH0_DOMAIN, AUTH0_AUDIENCE, AUTH0_CLIENT_ID
+
+# AUTH0 URL's constants
+CALLBACK_URL = 'http://127.0.0.1:5000/callback'
+LOGIN_URL = 'http://127.0.0.1:5000/login'
+AUTH0_LOGIN_URL = f'https://{AUTH0_DOMAIN}/authorize?audience={AUTH0_AUDIENCE}&response_type=code&client_id={AUTH0_CLIENT_ID}&redirect_uri={CALLBACK_URL}'
+AUTH0_LOGOUT_URL = f'https://{AUTH0_DOMAIN}/v2/logout?returnTo={LOGIN_URL}'
 
 
 def create_app(test_config=None):
@@ -11,20 +17,23 @@ def create_app(test_config=None):
     setup_db(app)
     app.secret_key = 'bafddb088a222c78b54f96f9eab7aaff'
 
-    # Login Page
-    @app.route('/')
-    def login():
-        # AUTH0 Login URL Constraint is imported from auth config file
-        # Redirect the user to the Auth0 login page
-        return redirect(auth0_login_url)
+    # Redirecting users to the /login route
 
-    # Logout route
+    @app.route('/')
+    def home():
+        return redirect(url_for('login'))
+
+    # AUTH0 Login page
+
+    @app.route('/login')
+    def login():
+        return redirect(AUTH0_LOGIN_URL)
+
+    # AUTH0 Logout page
 
     @app.route('/logout')
     def logout():
-        # AUTH0 Logout URL Constraint is imported from auth config file
-        # Redirect the user to the Auth0 logout page
-        return redirect(auth0_logout_url)
+        return redirect(AUTH0_LOGOUT_URL)
 
     # Homepage
 
