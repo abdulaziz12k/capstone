@@ -198,7 +198,7 @@ def create_app(test_config=None):
 
     @app.route('/googlemap')
     def googlemap():
-        return render_template('googlemap.html')
+        return render_template('GoogleMap.html')
 
     @app.route('/spotify')
     def spotify():

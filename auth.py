@@ -10,8 +10,6 @@ from dotenv import load_dotenv
 
 
 # Parse .env file and load all the variables found as environment variables.
-
-
 load_dotenv()
 
 AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN')
