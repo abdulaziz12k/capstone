@@ -1,3 +1,16 @@
+body {
+  background-image: url('/static/img/homepage.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+@media (max-width: 600px) {
+  body {
+    background-image: url('/static/img/homepage-mobile.jpg');
+  }
+}
+
 .btn-primary {
     color: #fff;
     background-color: #a94442;
@@ -16,7 +29,7 @@
     overflow: hidden;
     transition-duration: .3s;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
-    background-color: rgb(24, 126, 170);
+    background-color: rgb(33, 210, 186);
   }
   
   .sign {
