@@ -45,8 +45,6 @@ def create_app(test_config=None):
     def homepage():
         return render_template('homepage.html')
 
-    # Callback to homepage
-
     @app.route('/callback')
     def callback():
         return redirect(url_for('homepage'))
