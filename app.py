@@ -200,6 +200,7 @@ def create_app(test_config=None):
             }), 200
 
     # GoogleMap render view
+
     @app.route('/googlemap', methods=['GET'])
     def googlemap():
         return render_template('GoogleMap.html')
@@ -208,21 +209,24 @@ def create_app(test_config=None):
     def spotify():
         return render_template('spotify.html')
 
-    # Endpoint to generate jokes using print_joke function
-    @app.route('/jokes', methods=['GET'])
-    async def print_joke():
+    # Generate jokes using print_joke function
+
+    @app.route('/joke', methods=['GET'])
+    def get_joke():
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        joke = loop.run_until_complete(fetch_joke())
+        loop.close()
+        return jsonify({
+            "joker": joke
+        })
+
+    # Fetch and print jokes asynchronously
+
+    async def fetch_joke():
         j = await Jokes()  # Initialise the class
         joke = await j.get_joke()  # Retrieve a random joke
-        if joke["type"] == "single":  # Print the joke
-            print(joke["joke"])
-            return jsonify({
-                "joker": joke
-            })
-        else:
-            print(joke["setup"])
-            print(joke["delivery"])
-
-    asyncio.run(print_joke())
+        return joke
 
     # _______ERROR HANDLING _________#
 
@@ -254,20 +258,6 @@ def create_app(test_config=None):
             "message": exception.error
         }), exception.status_code
     return app
-
-
-# Fetch and print jokes asynchronously
-async def print_joke():
-    j = await Jokes()  # Initialise the class
-    joke = await j.get_joke()  # Retrieve a random joke
-    if joke["type"] == "single":  # Print the joke
-        print(joke["joke"])
-        return jsonify({
-            "joker": joke
-        })
-    else:
-        print(joke["setup"])
-        print(joke["delivery"])
 
 
 # Initialize app and run with debug mode
