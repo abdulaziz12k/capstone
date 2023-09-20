@@ -3,6 +3,9 @@ from db_config import setup_db
 from models import Movie, Actor
 from datetime import datetime
 from auth import requires_auth, check_permissions, AuthError, AUTH0_DOMAIN, AUTH0_AUDIENCE, AUTH0_CLIENT_ID
+from jokeapi import Jokes  # because why not :)
+import asyncio
+
 
 # AUTH0 URL's constants
 CALLBACK_URL = 'http://127.0.0.1:5000/callback'
@@ -17,6 +20,20 @@ def create_app(test_config=None):
     setup_db(app)
     app.secret_key = 'bafddb088a222c78b54f96f9eab7aaff'
 
+    @app.route('/joke')
+    async def print_joke():
+        j = await Jokes()  # Initialise the class
+        joke = await j.get_joke()  # Retrieve a random joke
+        if joke["type"] == "single":  # Print the joke
+            print(joke["joke"])
+            return jsonify({
+                "joker": joke
+            })
+        else:
+            print(joke["setup"])
+            print(joke["delivery"])
+
+    asyncio.run(print_joke())
     # Redirecting users to the /login route
 
     @app.route('/')
@@ -234,6 +251,20 @@ def create_app(test_config=None):
             "message": exception.error
         }), exception.status_code
     return app
+
+
+# Fetch and print jokes asynchronously
+async def print_joke():
+    j = await Jokes()  # Initialise the class
+    joke = await j.get_joke()  # Retrieve a random joke
+    if joke["type"] == "single":  # Print the joke
+        print(joke["joke"])
+        return jsonify({
+            "joker": joke
+        })
+    else:
+        print(joke["setup"])
+        print(joke["delivery"])
 
 
 # Initialize app and run with debug mode
