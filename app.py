@@ -19,6 +19,7 @@ def create_app(test_config=None):
         __name__, template_folder='templates')
     setup_db(app)
     app.secret_key = 'bafddb088a222c78b54f96f9eab7aaff'
+    # ______________________________________________________________ENDPOINTS_______________________________________________________________________#
 
     # Redirecting users to the /login route
 
@@ -221,14 +222,14 @@ def create_app(test_config=None):
             "joker": joke
         })
 
-    # Fetch and print jokes asynchronously
+    # Fetch and print jokes asynchronously, referring to "https://v2.jokeapi.dev/" documents
 
     async def fetch_joke():
         j = await Jokes()  # Initialise the class
         joke = await j.get_joke()  # Retrieve a random joke
         return joke
 
-    # _______ERROR HANDLING _________#
+    # ___________________________________________________ERROR HANDLING ____________________________________________________#
 
     @app.errorhandler(404)
     def resource_not_found(error):
