@@ -62,5 +62,20 @@
           type="text/javascript"
           src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
         ></script>
+            <!-- Button to fetch a joke -->
+    <button id="jokeButton" type="button" class="btn btn-primary">Get a joke</button>
+    <!-- display the joke -->
+    <div id="jokeField"></div>
+    <!-- fetch a joke when the button is clicked -->
+    <script>
+      document.getElementById("jokeButton").addEventListener("click", function() {
+        fetch('http://127.0.0.1:5000/joke')
+        .then(response => response.json())
+        .then(data => {
+          // Display the joke in the jokeField
+          document.getElementById("jokeField").innerText = data.setup + ' ' + data.delivery;
+        });
+      });
+    </script>
   </body>
 </html>
