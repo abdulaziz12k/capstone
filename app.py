@@ -20,20 +20,6 @@ def create_app(test_config=None):
     setup_db(app)
     app.secret_key = 'bafddb088a222c78b54f96f9eab7aaff'
 
-    @app.route('/joke')
-    async def print_joke():
-        j = await Jokes()  # Initialise the class
-        joke = await j.get_joke()  # Retrieve a random joke
-        if joke["type"] == "single":  # Print the joke
-            print(joke["joke"])
-            return jsonify({
-                "joker": joke
-            })
-        else:
-            print(joke["setup"])
-            print(joke["delivery"])
-
-    asyncio.run(print_joke())
     # Redirecting users to the /login route
 
     @app.route('/')
@@ -213,13 +199,30 @@ def create_app(test_config=None):
                 "deleted": actor_id
             }), 200
 
-    @app.route('/googlemap')
+    # GoogleMap render view
+    @app.route('/googlemap', methods=['GET'])
     def googlemap():
         return render_template('GoogleMap.html')
 
-    @app.route('/spotify')
+    @app.route('/spotify', methods=['GET'])
     def spotify():
         return render_template('spotify.html')
+
+    # Endpoint to generate jokes using print_joke function
+    @app.route('/jokes', methods=['GET'])
+    async def print_joke():
+        j = await Jokes()  # Initialise the class
+        joke = await j.get_joke()  # Retrieve a random joke
+        if joke["type"] == "single":  # Print the joke
+            print(joke["joke"])
+            return jsonify({
+                "joker": joke
+            })
+        else:
+            print(joke["setup"])
+            print(joke["delivery"])
+
+    asyncio.run(print_joke())
 
     # _______ERROR HANDLING _________#
 
