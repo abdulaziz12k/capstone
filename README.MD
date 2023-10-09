@@ -1,7 +1,7 @@
 # Casting Agency
 
 ## Capstone project for Udacity fullstack-web-developer program
-a simple backend based application to create delete, update movies and actors
+A web application to create delete, update movies and actors
 hosted online on RENDER
 The application includes all CRUD features and JWT decoding, coding using AUTH0
 
